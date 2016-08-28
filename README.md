@@ -1,4 +1,4 @@
-This version is modified by @liuqiang1357. 
+This version is modified by @liuqiang1357. Below is the original README.
 
 # Changes
 
@@ -8,7 +8,7 @@ This version is modified by @liuqiang1357.
 
 * Each Provider add a parameter "before" to know whether the divider is before the item.
 
-Below is the original README.
+
 
 # RecyclerView-FlexibleDivider
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-RecyclerView--FlexibleDivider-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1418)
