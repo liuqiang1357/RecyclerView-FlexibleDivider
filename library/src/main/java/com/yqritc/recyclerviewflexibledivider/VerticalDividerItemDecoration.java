@@ -21,7 +21,7 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
     }
 
     @Override
-    protected Rect getDividerBound(int position, RecyclerView parent, View child) {
+    protected Rect getDividerBound(int position, RecyclerView parent, View child, boolean before) {
         Rect bounds = new Rect(0, 0, 0, 0);
         int transitionX = (int) ViewCompat.getTranslationX(child);
         int transitionY = (int) ViewCompat.getTranslationY(child);
@@ -33,9 +33,10 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
 
         int dividerSize = getDividerSize(position, parent);
         boolean isReverseLayout = isReverseLayout(parent);
+
         if (mDividerType == DividerType.DRAWABLE) {
             // set left and right position of divider
-            if (isReverseLayout) {
+            if (isReverseLayout ^ before) {
                 bounds.right = child.getLeft() - params.leftMargin + transitionX;
                 bounds.left = bounds.right - dividerSize;
             } else {
@@ -45,7 +46,7 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
         } else {
             // set center point of divider
             int halfSize = dividerSize / 2;
-            if (isReverseLayout) {
+            if (isReverseLayout ^ before) {
                 bounds.left = child.getLeft() - params.leftMargin - halfSize + transitionX;
             } else {
                 bounds.left = child.getRight() + params.rightMargin + halfSize + transitionX;
@@ -73,6 +74,11 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
             return;
         }
 
+        if (mShowFirstDivider && position == 0) {
+            outRect.set(getDividerSize(position, parent), 0, getDividerSize(position, parent), 0);
+            return;
+        }
+
         if (isReverseLayout(parent)) {
             outRect.set(getDividerSize(position, parent), 0, 0, 0);
         } else {
@@ -81,11 +87,11 @@ public class VerticalDividerItemDecoration extends FlexibleDividerDecoration {
     }
 
     private int getDividerSize(int position, RecyclerView parent) {
-        if (mPaintProvider != null) {
-            return (int) mPaintProvider.dividerPaint(position, parent).getStrokeWidth();
-        } else if (mSizeProvider != null) {
+        if (mSizeProvider != null) {
             return mSizeProvider.dividerSize(position, parent);
-        } else if (mDrawableProvider != null) {
+        } else if (mPaintProvider != null) {
+            return (int) mPaintProvider.dividerPaint(position, parent).getStrokeWidth();
+        }else if (mDrawableProvider != null) {
             Drawable drawable = mDrawableProvider.drawableProvider(position, parent);
             return drawable.getIntrinsicWidth();
         }

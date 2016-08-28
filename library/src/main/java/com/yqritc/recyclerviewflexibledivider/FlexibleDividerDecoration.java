@@ -36,6 +36,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
     protected ColorProvider mColorProvider;
     protected DrawableProvider mDrawableProvider;
     protected SizeProvider mSizeProvider;
+    protected boolean mShowFirstDivider;
     protected boolean mShowLastDivider;
     protected boolean mPositionInsideItem;
     private Paint mPaint;
@@ -44,6 +45,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
         if (builder.mPaintProvider != null) {
             mDividerType = DividerType.PAINT;
             mPaintProvider = builder.mPaintProvider;
+            mSizeProvider = builder.mSizeProvider;
         } else if (builder.mColorProvider != null) {
             mDividerType = DividerType.COLOR;
             mColorProvider = builder.mColorProvider;
@@ -68,6 +70,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
         }
 
         mVisibilityProvider = builder.mVisibilityProvider;
+        mShowFirstDivider = builder.mShowFirstDivider;
         mShowLastDivider = builder.mShowLastDivider;
         mPositionInsideItem = builder.mPositionInsideItem;
     }
@@ -120,7 +123,27 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
                 continue;
             }
 
-            Rect bounds = getDividerBound(groupIndex, parent, child);
+            if (mShowFirstDivider && groupIndex == 0) {
+                Rect bounds = getDividerBound(groupIndex, parent, child, true);
+                switch (mDividerType) {
+                    case DRAWABLE:
+                        Drawable drawable = mDrawableProvider.drawableProvider(groupIndex, parent);
+                        drawable.setBounds(bounds);
+                        drawable.draw(c);
+                        break;
+                    case PAINT:
+                        mPaint = mPaintProvider.dividerPaint(groupIndex, parent);
+                        c.drawLine(bounds.left, bounds.top, bounds.right, bounds.bottom, mPaint);
+                        break;
+                    case COLOR:
+                        mPaint.setColor(mColorProvider.dividerColor(groupIndex, parent));
+                        mPaint.setStrokeWidth(mSizeProvider.dividerSize(groupIndex, parent));
+                        c.drawLine(bounds.left, bounds.top, bounds.right, bounds.bottom, mPaint);
+                        break;
+                }
+            }
+
+            Rect bounds = getDividerBound(groupIndex, parent, child, false);
             switch (mDividerType) {
                 case DRAWABLE:
                     Drawable drawable = mDrawableProvider.drawableProvider(groupIndex, parent);
@@ -238,7 +261,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
         return position;
     }
 
-    protected abstract Rect getDividerBound(int position, RecyclerView parent, View child);
+    protected abstract Rect getDividerBound(int position, RecyclerView parent, View child, boolean before);
 
     protected abstract void setItemOffsets(Rect outRect, int position, RecyclerView parent);
 
@@ -332,6 +355,7 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
                 return false;
             }
         };
+        private boolean mShowFirstDivider = false;
         private boolean mShowLastDivider = false;
         private boolean mPositionInsideItem = false;
 
@@ -415,6 +439,11 @@ public abstract class FlexibleDividerDecoration extends RecyclerView.ItemDecorat
 
         public T showLastDivider() {
             mShowLastDivider = true;
+            return (T) this;
+        }
+
+        public T showFirstDivider() {
+            mShowFirstDivider = true;
             return (T) this;
         }
 

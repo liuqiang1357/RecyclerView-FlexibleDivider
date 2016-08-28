@@ -1,7 +1,20 @@
+This version is modified by @liuqiang1357. 
+
+# Changes
+
+* Add Builder.showFisrtDivider parameter for draw divider line at the begin of first item.
+
+* PaintDivider can also add SizeProvider to change the default size.
+
+* Each Provider add a parameter "before" to know whether the divider is before the item.
+
+Below is the original README.
+
 # RecyclerView-FlexibleDivider
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-RecyclerView--FlexibleDivider-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1418)
 [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Download](https://api.bintray.com/packages/yqritc/maven/recyclerview-flexibledivider/images/download.svg)](https://bintray.com/yqritc/maven/recyclerview-flexibledivider/_latestVersion)
+
 
 Android library providing simple way to control divider items of RecyclerView
 

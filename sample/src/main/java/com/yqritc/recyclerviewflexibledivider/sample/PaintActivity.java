@@ -1,7 +1,5 @@
 package com.yqritc.recyclerviewflexibledivider.sample;
 
-import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,6 +13,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 
 public class PaintActivity extends AppCompatActivity {
@@ -51,6 +51,7 @@ public class PaintActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
                 .paint(paint)
                 .showLastDivider()
+                .showFirstDivider()
                 .build());
     }
 
