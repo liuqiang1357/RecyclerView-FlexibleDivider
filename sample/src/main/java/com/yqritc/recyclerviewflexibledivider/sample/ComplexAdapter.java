@@ -1,8 +1,5 @@
 package com.yqritc.recyclerviewflexibledivider.sample;
 
-import com.yqritc.recyclerviewflexibledivider.FlexibleDividerDecoration;
-import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
@@ -12,6 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.yqritc.recyclerviewflexibledivider.FlexibleDividerDecoration;
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 /**
  * Created by yqritc on 2015/01/08.
@@ -49,7 +49,7 @@ public class ComplexAdapter extends RecyclerView.Adapter<ComplexAdapter.ViewHold
     }
 
     @Override
-    public Paint dividerPaint(int position, RecyclerView parent) {
+    public Paint dividerPaint(int position, boolean before, RecyclerView parent) {
         Paint paint = new Paint();
         switch (position % 10) {
             case 0:
@@ -105,7 +105,7 @@ public class ComplexAdapter extends RecyclerView.Adapter<ComplexAdapter.ViewHold
 //    }
 
     @Override
-    public boolean shouldHideDivider(int position, RecyclerView parent) {
+    public boolean shouldHideDivider(int position, boolean before, RecyclerView parent) {
         if (position == 14 || position == 15) {
             return true;
         }
@@ -113,7 +113,7 @@ public class ComplexAdapter extends RecyclerView.Adapter<ComplexAdapter.ViewHold
     }
 
     @Override
-    public int dividerLeftMargin(int position, RecyclerView parent) {
+    public int dividerLeftMargin(int position, boolean before, RecyclerView parent) {
         if (position < 10) {
             return position * 20;
         } else {
@@ -122,7 +122,7 @@ public class ComplexAdapter extends RecyclerView.Adapter<ComplexAdapter.ViewHold
     }
 
     @Override
-    public int dividerRightMargin(int position, RecyclerView parent) {
+    public int dividerRightMargin(int position, boolean before, RecyclerView parent) {
         if (position < 10) {
             return position * 20 + 20;
         } else {
