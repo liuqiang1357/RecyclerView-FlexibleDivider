@@ -49,7 +49,7 @@ public class ComplexAdapter extends RecyclerView.Adapter<ComplexAdapter.ViewHold
     }
 
     @Override
-    public Paint dividerPaint(int position, boolean before, RecyclerView parent) {
+    public Paint dividerPaint(int position, int count, boolean after, RecyclerView parent) {
         Paint paint = new Paint();
         switch (position % 10) {
             case 0:
@@ -105,15 +105,15 @@ public class ComplexAdapter extends RecyclerView.Adapter<ComplexAdapter.ViewHold
 //    }
 
     @Override
-    public boolean shouldHideDivider(int position, boolean before, RecyclerView parent) {
-        if (position == 14 || position == 15) {
-            return true;
+    public boolean shouldDrawDivider(int position, int count, boolean after, RecyclerView parent) {
+        if (position != 14 && position != 15) {
+            return after;
         }
         return false;
     }
 
     @Override
-    public int dividerLeftMargin(int position, boolean before, RecyclerView parent) {
+    public int dividerLeftMargin(int position, int count, boolean after, RecyclerView parent) {
         if (position < 10) {
             return position * 20;
         } else {
@@ -122,7 +122,7 @@ public class ComplexAdapter extends RecyclerView.Adapter<ComplexAdapter.ViewHold
     }
 
     @Override
-    public int dividerRightMargin(int position, boolean before, RecyclerView parent) {
+    public int dividerRightMargin(int position, int count, boolean after, RecyclerView parent) {
         if (position < 10) {
             return position * 20 + 20;
         } else {

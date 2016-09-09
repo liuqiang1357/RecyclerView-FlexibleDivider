@@ -1,13 +1,14 @@
 This version is modified by @liuqiang1357. Below is the original README.
 
-# Changes
+# 修改如下
 
-* Add Builder.showFisrtDivider parameter for draw divider line at the begin of first item.
+* 添加showFisrtDivider,showLastDivider参数分别用来控制第一项之前和最后一项之后的分隔符是否显示，默认不显示
 
-* PaintDivider can also add SizeProvider to change the default size.
+* 修改VisibilityProvider用来控制每一项之前或之后的分隔符是否显示，默认仅显示除最后一项每一项之后的分隔符，如果设置会覆盖showFisrtDivider,showLastDivider的控制效果
 
-* Each Provider add a parameter "before" to know whether the divider is before the item.
+* 每一个Provider都添加count(表示itemCount或groupCount）和after（表示分隔符位置）参数进行控制
 
+* 修改PaintDivider也可以添加SizeProvider来控制分隔符的尺寸
 
 
 # RecyclerView-FlexibleDivider

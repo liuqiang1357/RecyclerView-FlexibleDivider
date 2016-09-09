@@ -21,22 +21,22 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
     }
 
     @Override
-    protected Rect getDividerBound(int position, RecyclerView parent, View child, boolean before) {
+    protected Rect getDividerBound(int position, int count, boolean after, RecyclerView parent, View child) {
         Rect bounds = new Rect(0, 0, 0, 0);
         int transitionX = (int) ViewCompat.getTranslationX(child);
         int transitionY = (int) ViewCompat.getTranslationY(child);
         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
         bounds.left = parent.getPaddingLeft() +
-                mMarginProvider.dividerLeftMargin(position, before, parent) + transitionX;
+                mMarginProvider.dividerLeftMargin(position, count, after, parent) + transitionX;
         bounds.right = parent.getWidth() - parent.getPaddingRight() -
-                mMarginProvider.dividerRightMargin(position, before, parent) + transitionX;
+                mMarginProvider.dividerRightMargin(position, count, after, parent) + transitionX;
 
-        int dividerSize = getDividerSize(position, parent, before);
+        int dividerSize = getDividerSize(position, count, after, parent);
         boolean isReverseLayout = isReverseLayout(parent);
 
         if (mDividerType == DividerType.DRAWABLE) {
             // set top and bottom position of divider
-            if (isReverseLayout ^ before) {
+            if (isReverseLayout == after) {
                 bounds.bottom = child.getTop() - params.topMargin + transitionY;
                 bounds.top = bounds.bottom - dividerSize;
             } else {
@@ -46,7 +46,7 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
         } else {
             // set center point of divider
             int halfSize = dividerSize / 2;
-            if (isReverseLayout ^ before) {
+            if (isReverseLayout == after) {
                 bounds.top = child.getTop() - params.topMargin - halfSize + transitionY;
             } else {
                 bounds.top = child.getBottom() + params.bottomMargin + halfSize + transitionY;
@@ -68,14 +68,18 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
     }
 
     @Override
-    protected void setItemOffsets(Rect outRect, int position, RecyclerView parent, boolean drawBefore, boolean drawAfter) {
+    protected void setItemOffsets(Rect outRect, int position, int count, RecyclerView parent) {
+
+        boolean drawBefore = mVisibilityProvider.shouldDrawDivider(position, count, false, parent);
+        boolean drawAfter = mVisibilityProvider.shouldDrawDivider(position, count, true, parent);
+
         if (mPositionInsideItem || !drawBefore && !drawAfter) {
             outRect.set(0, 0, 0, 0);
             return;
         }
 
-        int beforeSize = drawBefore ? getDividerSize(position, parent, true) : 0;
-        int AfterSize = drawAfter ? getDividerSize(position, parent, false) : 0;
+        int beforeSize = drawBefore ? getDividerSize(position, count, false, parent) : 0;
+        int AfterSize = drawAfter ? getDividerSize(position, count, true, parent) : 0;
 
         if (isReverseLayout(parent)) {
             outRect.set(0, AfterSize, 0, beforeSize);
@@ -84,13 +88,13 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
         }
     }
 
-    private int getDividerSize(int position, RecyclerView parent, boolean before) {
+    private int getDividerSize(int position, int count, boolean after, RecyclerView parent) {
         if (mSizeProvider != null) {
-            return mSizeProvider.dividerSize(position, before, parent);
+            return mSizeProvider.dividerSize(position, count, after, parent);
         } else if (mPaintProvider != null) {
-            return (int) mPaintProvider.dividerPaint(position, before, parent).getStrokeWidth();
+            return (int) mPaintProvider.dividerPaint(position, count, after, parent).getStrokeWidth();
         } else if (mDrawableProvider != null) {
-            Drawable drawable = mDrawableProvider.drawableProvider(position, before, parent);
+            Drawable drawable = mDrawableProvider.drawableProvider(position, count, after, parent);
             return drawable.getIntrinsicHeight();
         }
         throw new RuntimeException("failed to get size");
@@ -105,31 +109,33 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
          * Returns left margin of divider.
          *
          * @param position Divider position (or group index for GridLayoutManager)
-         * @param before
+         * @param count
+         * @param after
          * @param parent   RecyclerView  @return left margin
          */
-        int dividerLeftMargin(int position, boolean before, RecyclerView parent);
+        int dividerLeftMargin(int position, int count, boolean after, RecyclerView parent);
 
         /**
          * Returns right margin of divider.
          *
          * @param position Divider position (or group index for GridLayoutManager)
-         * @param before
+         * @param count
+         * @param after
          * @param parent   RecyclerView  @return right margin
          */
-        int dividerRightMargin(int position, boolean before, RecyclerView parent);
+        int dividerRightMargin(int position, int count, boolean after, RecyclerView parent);
     }
 
     public static class Builder extends FlexibleDividerDecoration.Builder<Builder> {
 
         private MarginProvider mMarginProvider = new MarginProvider() {
             @Override
-            public int dividerLeftMargin(int position, boolean before, RecyclerView parent) {
+            public int dividerLeftMargin(int position, int count, boolean after, RecyclerView parent) {
                 return 0;
             }
 
             @Override
-            public int dividerRightMargin(int position, boolean before, RecyclerView parent) {
+            public int dividerRightMargin(int position, int count, boolean after, RecyclerView parent) {
                 return 0;
             }
         };
@@ -141,12 +147,12 @@ public class HorizontalDividerItemDecoration extends FlexibleDividerDecoration {
         public Builder margin(final int leftMargin, final int rightMargin) {
             return marginProvider(new MarginProvider() {
                 @Override
-                public int dividerLeftMargin(int position, boolean before, RecyclerView parent) {
+                public int dividerLeftMargin(int position, int count, boolean after, RecyclerView parent) {
                     return leftMargin;
                 }
 
                 @Override
-                public int dividerRightMargin(int position, boolean before, RecyclerView parent) {
+                public int dividerRightMargin(int position, int count, boolean after, RecyclerView parent) {
                     return rightMargin;
                 }
             });

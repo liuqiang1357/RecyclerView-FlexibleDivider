@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.yqritc.recyclerviewflexibledivider.FlexibleDividerDecoration;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 
@@ -50,8 +51,12 @@ public class PaintActivity extends AppCompatActivity {
         paint.setPathEffect(new DashPathEffect(new float[]{25.0f, 25.0f}, 0));
         recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
                 .paint(paint)
-                .showLastDivider()
-                .showFirstDivider()
+                .visibilityProvider(new FlexibleDividerDecoration.VisibilityProvider() {
+                    @Override
+                    public boolean shouldDrawDivider(int position, int count, boolean after, RecyclerView parent) {
+                        return position % 3 == 0 && after;
+                    }
+                })
                 .build());
     }
 
