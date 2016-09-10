@@ -1,10 +1,10 @@
 This version is modified by @liuqiang1357. Below is the original README.
 
-# 修改如下
+# Changes
 
-* 添加showFisrtDivider,showLastDivider参数分别用来控制第一项之前和最后一项之后的分隔符是否显示，默认不显示
+* 添加showFirstDivider,showLastDivider参数分别用来控制第一项之前和最后一项之后的分隔符是否显示，默认不显示
 
-* 修改VisibilityProvider用来控制每一项之前或之后的分隔符是否显示，默认仅显示除最后一项每一项之后的分隔符，如果设置会覆盖showFisrtDivider,showLastDivider的控制效果
+* 修改VisibilityProvider用来控制每一项之前或之后的分隔符是否显示，默认仅显示除最后一项每一项之后的分隔符，如果设置会覆盖showFirstDivider,showLastDivider的控制效果
 
 * 每一个Provider都添加count(表示itemCount或groupCount）和after（表示分隔符位置）参数进行控制
 
